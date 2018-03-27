@@ -46,9 +46,13 @@ int main() {
   t.Do();
   t.PrintMsg();
 
-  Defer d([]() {std::cout << "-- im 1" << std::endl; });
-  d.Then([]() {std::cout << "-- im 2" << std::endl; }).
+  Defer d = Defer([]() {std::cout << "-- im 1" << std::endl; }).
+      Then([]() {std::cout << "-- im 2" << std::endl; }).
       Then([]() {std::cout << "-- im 3" << std::endl; }).
-      Then([]() {std::cout << "-- im 4" << std::endl; });
+      Then([]() {std::cout << "-- im 4" << std::endl; }).
+      Then([]() {std::cout << "-- im 5" << std::endl; });
+
+  Defer D;
+  D = d;
   return 0;
 }

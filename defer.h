@@ -5,10 +5,17 @@
 
 class Defer final {
  public:
-  Defer() = delete;
-  Defer& operator=(const Defer&) = delete;
+  Defer() {}
+  Defer(Defer& other) {
+    this->cbs_ = std::move(other.cbs_);
+  }
 
-  Defer(std::function<void()>&& cb) {
+  Defer& operator=(Defer& other) noexcept {
+    this->cbs_ = std::move(other.cbs_);
+    return *this;
+  };
+
+  explicit Defer(std::function<void()>&& cb) {
     cbs_.emplace_back(std::move(cb));
   }
   ~Defer() {
