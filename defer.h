@@ -6,11 +6,14 @@
 class Defer final {
  public:
   Defer() {}
+
+  Defer& operator=(const Defer&) = delete;
+
   Defer(Defer& other) {
     this->cbs_ = std::move(other.cbs_);
   }
 
-  Defer& operator=(Defer& other) noexcept {
+  Defer& operator=(Defer&& other) noexcept {
     this->cbs_ = std::move(other.cbs_);
     return *this;
   };

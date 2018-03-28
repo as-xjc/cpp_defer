@@ -51,8 +51,5 @@ int main() {
       Then([]() {std::cout << "-- im 3" << std::endl; }).
       Then([]() {std::cout << "-- im 4" << std::endl; }).
       Then([]() {std::cout << "-- im 5" << std::endl; });
-
-  Defer D;
-  D = d;
   return 0;
 }
