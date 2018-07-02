@@ -25,7 +25,7 @@ class test {
   }
   void PrintMsg() {
     auto p = new Print("print the msg");
-    DEFER_IN_CLASS(msg(p));
+    DEFER_CLASS(msg(p));
   }
 
 };
@@ -46,10 +46,10 @@ int main() {
   t.Do();
   t.PrintMsg();
 
-  Defer d = Defer([]() {std::cout << "-- im 1" << std::endl; }).
-      Then([]() {std::cout << "-- im 2" << std::endl; }).
-      Then([]() {std::cout << "-- im 3" << std::endl; }).
-      Then([]() {std::cout << "-- im 4" << std::endl; }).
-      Then([]() {std::cout << "-- im 5" << std::endl; });
+  DEFER_ADD(std::cout << "-- im 1" << std::endl;);
+  DEFER_ADD(std::cout << "-- im 2" << std::endl;);
+  DEFER_ADD(std::cout << "-- im 3" << std::endl;);
+  DEFER_ADD(std::cout << "-- im 4" << std::endl;);
+  DEFER_ADD(std::cout << "-- im 5" << std::endl;);
   return 0;
 }
