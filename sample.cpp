@@ -46,10 +46,10 @@ int main() {
   t.Do();
   t.PrintMsg();
 
-  DEFER_ADD(std::cout << "-- im 1" << std::endl;);
-  DEFER_ADD(std::cout << "-- im 2" << std::endl;);
-  DEFER_ADD(std::cout << "-- im 3" << std::endl;);
-  DEFER_ADD(std::cout << "-- im 4" << std::endl;);
-  DEFER_ADD(std::cout << "-- im 5" << std::endl;);
+  DEFER(std::cout << "-- im 1" << std::endl;);
+  DEFER(std::cout << "-- im 2" << std::endl;);
+  DEFER(std::cout << "-- im 3" << std::endl;);
+  DEFER(std::cout << "-- im 4" << std::endl;);
+  DEFER(std::cout << "-- im 5" << std::endl;);
   return 0;
 }

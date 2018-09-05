@@ -1,6 +1,5 @@
 #pragma once
 
-#include <list>
 #include <functional>
 
 /**
@@ -11,7 +10,7 @@
 class Defer final {
  public:
   Defer() {}
-  ~Defer() { Done(); }
+  ~Defer() { if (cb_) cb_(); }
 
   Defer(const Defer& other) = delete;
   Defer& operator=(const Defer&) = delete;
@@ -20,27 +19,15 @@ class Defer final {
   Defer& operator=(Defer&& other) = delete;
 
   explicit Defer(std::function<void()>&& cb) {
-    cbs_.push_back(std::move(cb));
-  }
-
-  void Add(std::function<void()>&& cb) {
-    cbs_.push_back(std::move(cb));
-  }
-
-  void Done() {
-    if (cbs_.empty()) return;
-
-    for (auto it = cbs_.rbegin(); it != cbs_.rend() ; ++it) {
-      if (*it) (*it)();
-    }
-    cbs_.clear();
+    cb_ = std::move(cb);
   }
 
  private:
-  std::list<std::function<void()>> cbs_;
+    std::function<void()> cb_;
 };
 
-#define DEFER(cmd) ::Defer ___simulate_go_defer___([&]() { cmd; })
-#define DEFER_ADD(cmd) ___simulate_go_defer___.Add([&]() { cmd; })
-#define DEFER_CLASS(cmd) ::Defer ___simulate_go_defer_in_class___([&, this]() { cmd; })
-#define DEFER_CLASS_ADD(cmd) ___simulate_go_defer_in_class___.Add([&, this]() { cmd; })
+#define __CPP_DEFER_CAT(a, b) a##b
+#define _CPP_DEFER_CAT(a, b) __CPP_DEFER_CAT(a, b)
+
+#define DEFER(cmd) ::Defer _CPP_DEFER_CAT(__go_defer__, __LINE__)([&]() { cmd; })
+#define DEFER_CLASS(cmd) ::Defer _CPP_DEFER_CAT(__go_defer_class__, __LINE__)([&, this]() { cmd; })
